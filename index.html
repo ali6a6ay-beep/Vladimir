@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#09251b">
+<title>Владимир</title>
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #071a13;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+main { padding: 30px; width: 85%; max-width: 420px; }
+h1 { letter-spacing: 6px; color: #65e69a; }
+p { color: #b8d3c2; }
+button {
+  background: #35d07f;
+  color: #09251b;
+  border: none;
+  border-radius: 50%;
+  width: 125px;
+  height: 125px;
+  font-size: 45px;
+  margin: 30px;
+  cursor: pointer;
+}
+#result {
+  background: #102b20;
+  border-radius: 15px;
+  padding: 20px;
+  min-height: 55px;
+  line-height: 1.5;
+}
+</style>
+</head>
+<body>
+<main>
+<h1>ВЛАДИМИР</h1>
+<p>Персональный голосовой помощник</p>
+<div id="status">Готов к работе</div>
+<button id="mic">🎙️</button>
+<div id="result">Здесь появится распознанный текст</div>
+</main>
+<script>
+const mic = document.getElementById("mic");
+const status = document.getElementById("status");
+const result = document.getElementById("result");
+
+const Recognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let recognition;
+let active = false;
+
+mic.onclick = () => {
+  if (!Recognition) {
+    status.textContent = "Распознавание недоступно в этом браузере";
+    return;
+  }
+
+  if (active) {
+    recognition.stop();
+    active = false;
+    status.textContent = "Остановлено";
+    return;
+  }
+
+  recognition = new Recognition();
+  recognition.lang = "ru-RU";
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.onstart = () => {
+    active = true;
+    status.textContent = "Слушаю вас...";
+  };
+
+  recognition.onresult = (event) => {
+    let text = "";
+    for (let i = 0; i < event.results.length; i++) {
+      text += event.results[i][0].transcript + " ";
+    }
+    result.textContent = text;
+  };
+
+  recognition.onerror = () => {
+    active = false;
+    status.textContent = "Ошибка микрофона";
+  };
+
+  recognition.onend = () => {
+    active = false;
+    status.textContent = "Готов к работе";
+  };
+
+  recognition.start();
+};
+</script>
+</body>
+</html>
