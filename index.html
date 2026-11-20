@@ -1,107 +1,311 @@
 <!DOCTYPE html>
+
 <html lang="ru">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <meta name="theme-color" content="#09251b">
+
 <title>Владимир</title>
+
 <style>
+
 body {
+
   margin: 0;
+
   min-height: 100vh;
+
   background: #071a13;
+
   color: white;
+
   font-family: Arial, sans-serif;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   text-align: center;
+
 }
-main { padding: 30px; width: 85%; max-width: 420px; }
-h1 { letter-spacing: 6px; color: #65e69a; }
+
+main {
+
+  padding: 30px;
+
+  width: 85%;
+
+  max-width: 420px;
+
+}
+
+h1 {
+
+  letter-spacing: 6px;
+
+  color: #65e69a;
+
+}
+
 p { color: #b8d3c2; }
+
 button {
+
   background: #35d07f;
+
   color: #09251b;
+
   border: none;
+
   border-radius: 50%;
+
   width: 125px;
+
   height: 125px;
+
   font-size: 45px;
+
   margin: 30px;
+
   cursor: pointer;
+
 }
+
 #result {
+
   background: #102b20;
+
   border-radius: 15px;
+
   padding: 20px;
+
   min-height: 55px;
+
   line-height: 1.5;
+
 }
+
 </style>
+
 </head>
+
 <body>
+
 <main>
+
 <h1>ВЛАДИМИР</h1>
+
 <p>Персональный голосовой помощник</p>
+
 <div id="status">Готов к работе</div>
+
 <button id="mic">🎙️</button>
-<div id="result">Здесь появится распознанный текст</div>
+
+<div id="result">Скажите: Привет, Владимир</div>
+
 </main>
+
 <script>
+
 const mic = document.getElementById("mic");
+
 const status = document.getElementById("status");
+
 const result = document.getElementById("result");
 
 const Recognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  window.SpeechRecognition ||
+
+  window.webkitSpeechRecognition;
 
 let recognition;
+
 let active = false;
 
+function answer(text) {
+
+  const message = text.toLowerCase();
+
+  let reply;
+
+  if (message.includes("привет")) {
+
+    reply = "Привет! Я Владимир. Рад тебя слышать!";
+
+  } else if (message.includes("как дела")) {
+
+    reply = "У меня всё хорошо. Я готов с тобой общаться!";
+
+  } else if (message.includes("как тебя зовут")) {
+
+    reply = "Меня зовут Владимир. Я твой голосовой помощник.";
+
+  } else if (message.includes("спасибо")) {
+
+    reply = "Всегда пожалуйста!";
+
+  } else if (message.includes("пока")) {
+
+    reply = "До встречи! Буду ждать тебя.";
+
+  } else {
+
+    reply = "Я услышал тебя. Пока я учусь отвечать на вопросы.";
+
+  }
+
+  result.textContent = "Владимир: " + reply;
+
+  speak(reply);
+
+}
+
+function speak(text) {
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.lang = "ru-RU";
+
+  utterance.rate = 0.95;
+
+  utterance.pitch = 0.85;
+
+  const voices = window.speechSynthesis.getVoices();
+
+  const russianVoice = voices.find(v =>
+
+    v.lang.toLowerCase().startsWith("ru")
+
+  );
+
+  if (russianVoice) {
+
+    utterance.voice = russianVoice;
+
+  }
+
+  status.textContent = "Владимир отвечает...";
+
+  utterance.onend = () => {
+
+    status.textContent = "Готов к работе";
+
+  };
+
+  window.speechSynthesis.speak(utterance);
+
+}
+
 mic.onclick = () => {
+
   if (!Recognition) {
-    status.textContent = "Распознавание недоступно в этом браузере";
+
+    status.textContent = "Открой сайт в Chrome";
+
     return;
+
   }
 
   if (active) {
+
     recognition.stop();
-    active = false;
-    status.textContent = "Остановлено";
+
     return;
+
   }
 
   recognition = new Recognition();
+
   recognition.lang = "ru-RU";
-  recognition.continuous = true;
+
+  recognition.continuous = false;
+
   recognition.interimResults = true;
 
   recognition.onstart = () => {
+
     active = true;
+
     status.textContent = "Слушаю вас...";
+
   };
 
   recognition.onresult = (event) => {
-    let text = "";
-    for (let i = 0; i < event.results.length; i++) {
-      text += event.results[i][0].transcript + " ";
+
+    let finalText = "";
+
+    let interimText = "";
+
+    for (let i = event.resultIndex;
+
+         i < event.results.length; i++) {
+
+      if (event.results[i].isFinal) {
+
+        finalText += event.results[i][0].transcript;
+
+      } else {
+
+        interimText += event.results[i][0].transcript;
+
+      }
+
     }
-    result.textContent = text;
+
+    if (interimText) {
+
+      result.textContent = interimText;
+
+    }
+
+    if (finalText.trim()) {
+
+      result.textContent = finalText;
+
+      recognition.stop();
+
+      answer(finalText.trim());
+
+    }
+
   };
 
   recognition.onerror = () => {
+
     active = false;
+
     status.textContent = "Ошибка микрофона";
+
   };
 
   recognition.onend = () => {
+
     active = false;
-    status.textContent = "Готов к работе";
+
+    if (status.textContent === "Слушаю вас...") {
+
+      status.textContent = "Готов к работе";
+
+    }
+
   };
 
   recognition.start();
+
 };
+
 </script>
+
 </body>
+
 </html>
