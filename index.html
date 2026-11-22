@@ -1,280 +1,597 @@
 <!DOCTYPE html>
+
 <html lang="ru">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Владимир — помощник</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="theme-color" content="#061b14">
+
+<title>Владимир</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+
+* { box-sizing: border-box; }
 
 body {
+
   margin: 0;
-  padding: 20px 14px;
+
+  padding: 18px 14px;
+
   min-height: 100vh;
+
   background: #061b14;
-  color: #eafff2;
+
+  color: #edfff4;
+
   font-family: Arial, sans-serif;
+
 }
 
 .app {
-  width: 100%;
+
   max-width: 520px;
+
   margin: auto;
+
 }
 
 header {
+
   text-align: center;
-  padding: 20px 0;
+
+  padding: 24px 0;
+
 }
 
 h1 {
+
   color: #42dc91;
-  font-size: 32px;
+
+  font-size: 34px;
+
   letter-spacing: 6px;
-  margin: 5px 0;
+
+  margin: 0 0 8px;
+
 }
 
-.subtitle {
-  color: #a6c9b7;
-  font-size: 14px;
-}
+.subtitle { color: #a6c9b7; }
 
-.status {
+#status {
+
   color: #42dc91;
-  margin-top: 16px;
+
   font-size: 14px;
+
+  margin-top: 15px;
+
 }
 
 button {
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 18px;
+
+  border: 0;
+
+  border-radius: 16px;
+
   padding: 15px;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
 }
 
+button:active { transform: scale(.97); }
+
 .greet {
+
   width: 100%;
+
   background: #35d18a;
+
   color: #062719;
-  margin: 15px 0;
+
 }
 
 .mic-area {
+
   text-align: center;
-  margin: 15px 0;
+
+  padding: 24px 0;
+
 }
 
 .mic {
-  width: 105px;
-  height: 105px;
+
+  width: 100px;
+
+  height: 100px;
+
   border-radius: 50%;
+
   background: #35d18a;
-  font-size: 42px;
+
+  font-size: 40px;
+
 }
 
 .stop {
+
+  display: block;
+
   width: 100%;
-  margin-top: 12px;
+
+  margin-top: 14px;
+
   background: #214b39;
+
   color: white;
+
 }
 
 .chat {
+
   background: #0d2b20;
-  border-radius: 22px;
-  padding: 15px;
-  min-height: 190px;
+
+  border-radius: 20px;
+
+  padding: 14px;
+
+  min-height: 200px;
+
   max-height: 350px;
+
   overflow-y: auto;
-  margin: 22px 0;
+
+  margin: 10px 0 18px;
+
 }
 
 .message {
+
   padding: 13px;
-  border-radius: 15px;
+
+  border-radius: 14px;
+
   margin: 10px 0;
-  line-height: 1.45;
+
+  line-height: 1.5;
+
   overflow-wrap: anywhere;
+
 }
 
 .vladimir {
+
   background: #194331;
-  margin-right: 20px;
+
+  margin-right: 18px;
+
 }
 
 .user {
+
   background: #176b49;
-  margin-left: 20px;
+
+  margin-left: 18px;
+
   text-align: right;
+
 }
 
 .input-area {
+
   display: flex;
+
   gap: 8px;
-  margin-bottom: 22px;
+
+  margin-bottom: 20px;
+
 }
 
 input {
+
   flex: 1;
+
   min-width: 0;
+
   padding: 14px;
+
   border-radius: 14px;
+
   border: 1px solid #39805e;
+
   background: #102e22;
+
   color: white;
+
   font-size: 16px;
+
 }
 
 .send {
-  background: #35d18a;
-  color: #062719;
+
   width: 55px;
+
+  background: #35d18a;
+
+  color: #062719;
+
 }
 
-.settings {
-  background: #0d2b20;
-  padding: 17px;
-  border-radius: 20px;
-}
+.footer {
 
-.settings h3 {
-  margin-top: 0;
-  color: #42dc91;
-}
+  text-align: center;
 
-.settings label {
-  display: block;
-  margin: 14px 0 7px;
-  color: #b6d2c2;
-}
-
-select {
-  width: 100%;
-  padding: 13px;
-  border-radius: 12px;
-  border: 1px solid #39805e;
-  background: #194331;
-  color: white;
-  font-size: 15px;
-}
-
-.note {
   color: #8fac9b;
-  font-size: 12px;
-  line-height: 1.5;
-  margin-top: 15px;
-}
 
-button:active {
-  transform: scale(0.97);
+  font-size: 12px;
+
+  padding: 12px;
+
 }
 
 </style>
+
 </head>
 
 <body>
+
 <div class="app">
 
 <header>
+
   <h1>ВЛАДИМИР</h1>
+
   <div class="subtitle">Твой персональный помощник</div>
-  <div class="status" id="status">Готов к работе</div>
+
+  <div id="status">Готов к работе</div>
+
 </header>
 
 <button class="greet" id="greet">
-  Поздороваться 💚
+
+  Поздороваться 💚 
+
 </button>
 
 <div class="mic-area">
-  <button class="mic" id="mic">🎙️</button>
+
+  <button class="mic" id="mic">🎙️ </button>
+
   <button class="stop" id="stop">Остановить голос</button>
+
 </div>
 
 <div class="chat" id="chat">
+
   <div class="message vladimir">
-    Владимир: Привет! Я готов к общению.
-    Нажми на микрофон или напиши мне.
+
+    Владимир: Привет! Нажми кнопку приветствия, и мы начнём общаться.
+
   </div>
+
 </div>
 
 <div class="input-area">
-  <input id="message" type="text"
-    placeholder="Напиши Владимиру...">
+
+  <input id="message" placeholder="Напиши Владимиру..." autocomplete="off">
+
   <button class="send" id="send">➤</button>
+
 </div>
 
-<div class="settings">
-  <h3>Настройки голоса</h3>
+<div class="footer">
 
-  <label for="style">Манера речи</label>
-  <select id="style">
-    <option value="calm">Спокойный, бархатный</option>
-    <option value="radio">Выразительный, радиоведущий</option>
-  </select>
+  Владимир всегда готов к общению 💚 
 
-  <label for="voice">Голос устройства</label>
-  <select id="voice">
-    <option value="">Загрузка голосов...</option>
-  </select>
-
-  <div class="note">
-    Доступные голоса зависят от браузера и устройства.
-  </div>
 </div>
 
 </div>
 
 <script>
+
 const statusBox = document.getElementById("status");
+
 const chat = document.getElementById("chat");
-const messageInput = document.getElementById("message");
-const voiceSelect = document.getElementById("voice");
-const styleSelect = document.getElementById("style");
+
+const input = document.getElementById("message");
 
 let recognition = null;
+
 let listening = false;
 
+let greeted = false;
+
 function addMessage(who, text) {
+
   const div = document.createElement("div");
+
   div.className = "message " + who;
+
   div.textContent =
+
     (who === "user" ? "Ты: " : "Владимир: ") + text;
 
   chat.appendChild(div);
+
   chat.scrollTop = chat.scrollHeight;
 
+}
 
-...") {
+function speak(text) {
+
+  if (!("speechSynthesis" in window)) {
+
+    statusBox.textContent = "Озвучка не поддерживается";
+
+    return;
+
+  }
+
+  speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.lang = "ru-RU";
+
+  // Выразительная манера радиоведущего
+
+  utterance.rate = 0.96;
+
+  utterance.pitch = 0.92;
+
+  utterance.volume = 1;
+
+  const voices = speechSynthesis.getVoices();
+
+  const russian = voices.filter(v =>
+
+    v.lang.toLowerCase().startsWith("ru")
+
+  );
+
+  if (russian.length) {
+
+    utterance.voice = russian[0];
+
+  }
+
+  utterance.onstart = () => {
+
+    statusBox.textContent = "Владимир говорит...";
+19:08
+
+
+};
+
+  utterance.onend = () => {
+
+    statusBox.textContent = "Готов к общению";
+
+  };
+
+  utterance.onerror = () => {
+
+    statusBox.textContent = "Не удалось включить голос";
+
+  };
+
+  speechSynthesis.speak(utterance);
+
+}
+
+function answer(text) {
+
+  const q = text.toLowerCase();
+
+  let response;
+
+  if (/привет|здравствуй|добрый день|добрый вечер/.test(q)) {
+
+    response = "Привет! Рад тебя слышать. Что сегодня будем делать?";
+
+  } else if (/как дела|как ты/.test(q)) {
+
+    response = "У меня всё отлично. Я готов работать и общаться!";
+
+  } else if (/как тебя зовут|кто ты/.test(q)) {
+
+    response = "Я Владимир, твой персональный помощник.";
+
+  } else if (/спасибо|благодарю/.test(q)) {
+
+    response = "Всегда пожалуйста! Обращайся.";
+
+  } else if (/пока|до свидания/.test(q)) {
+
+    response = "До встречи! Буду ждать нашего следующего разговора.";
+
+  } else {
+
+    response = "Я тебя услышал. Пока мои ответы ограничены. Следующим этапом подключим настоящий искусственный интеллект.";
+
+  }
+
+  addMessage("vladimir", response);
+
+  speak(response);
+
+}
+
+function sendMessage(text) {
+
+  text = text.trim();
+
+  if (!text) return;
+
+  addMessage("user", text);
+
+  input.value = "";
+
+  answer(text);
+
+}
+
+document.getElementById("greet").addEventListener("click", () => {
+
+  const greeting = greeted
+
+    ? "Снова привет! Я слушаю тебя."
+
+    : "Привет! Я Владимир, твой персональный помощник. Рад тебя слышать!";
+
+  greeted = true;
+
+  addMessage("vladimir", greeting);
+
+  speak(greeting);
+
+});
+
+document.getElementById("send").addEventListener("click", () => {
+
+  sendMessage(input.value);
+
+});
+
+input.addEventListener("keydown", event => {
+
+  if (event.key === "Enter") {
+
+    sendMessage(input.value);
+
+  }
+
+});
+
+function startListening() {
+
+  const SpeechRecognition =
+
+    window.SpeechRecognition ||
+
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+
+    statusBox.textContent =
+
+      "Распознавание речи не поддерживается. Используй диктовку клавиатуры iPhone.";
+
+    return;
+
+  }
+
+  if (listening && recognition) {
+
+    recognition.stop();
+
+    return;
+
+  }
+
+  recognition = new SpeechRecognition();
+
+  recognition.lang = "ru-RU";
+
+  recognition.continuous = false;
+
+  recognition.interimResults = false;
+
+  recognition.onstart = () => {
+
+    listening = true;
+
+    statusBox.textContent = "Слушаю тебя...";
+
+    document.getElementById("mic").textContent = "🔴 ";
+
+  };
+
+  recognition.onresult = event => {
+
+    const spokenText = event.results[0][0].transcript;
+
+    sendMessage(spokenText);
+
+  };
+
+  recognition.onerror = event => {
+
+    statusBox.textContent =
+
+      "Ошибка микрофона: " + event.error;
+
+  };
+
+  recognition.onend = () => {
+
+    listening = false;
+
+    document.getElementById("mic").textContent = "🎙️ ";
+
+    if (statusBox.textContent === "Слушаю тебя...") {
+
       statusBox.textContent = "Готов к общению";
+
     }
+
   };
 
   try {
+
     recognition.start();
+
   } catch (error) {
-    statusBox.textContent = "Не удалось запустить микрофон";
+
+    statusBox.textContent = "Не удалось включить микрофон";
+
   }
+
 }
 
-document.getElementById("mic").onclick = startListening;
+document.getElementById("mic").addEventListener("click", startListening);
 
-document.getElementById("stop").onclick = () => {
+document.getElementById("stop").addEventListener("click", () => {
+
   if ("speechSynthesis" in window) {
+
     speechSynthesis.cancel();
+
   }
 
   if (recognition && listening) {
+
     recognition.stop();
+
   }
 
   statusBox.textContent = "Голос остановлен";
-};
+
+});
+
+if ("speechSynthesis" in window) {
+
+  speechSynthesis.getVoices();
+
+  speechSynthesis.onvoiceschanged = () => {
+
+    speechSynthesis.getVoices();
+
+  };
+
+}
+
 </script>
 
 </body>
+
 </html>
